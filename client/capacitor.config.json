@@ -1,0 +1,9 @@
+{
+  "appId": "com.safety.app",
+  "appName": "Safety App",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true,
+    "androidScheme": "http"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "safety-app-server",
+  "version": "1.0.0",
+  "description": "Backend for Personal Safety App",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.19.2",
+    "libphonenumber-js": "^1.12.38",
+    "nodemailer": "^8.0.5",
+    "twilio": "^5.12.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
