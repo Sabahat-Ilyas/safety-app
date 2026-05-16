@@ -1,0 +1,27 @@
+[
+  {
+    "email": "user@example.com",
+    "password": "password123",
+    "name": "Internal Test User"
+  },
+  {
+    "name": "Sabahat",
+    "email": "sbhtilyas@gmail.com",
+    "password": "cheakbook"
+  },
+  {
+    "name": "sabaht",
+    "email": "sabahatilyas86@gmail.com",
+    "password": "123456789"
+  },
+  {
+    "name": "Anjum",
+    "email": "anjumali7888@gmail.com",
+    "password": "123456789"
+  },
+  {
+    "name": "simmah",
+    "email": "em6682765@gmail.com",
+    "password": "123456"
+  }
+]
