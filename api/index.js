@@ -11,8 +11,7 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Static files are handled by Vercel directly
 
 // Persistent Data Paths
 const USERS_FILE = path.join(__dirname, 'users.json');
@@ -404,11 +403,8 @@ app.post('/api/ai/analyze-movement', async (req, res) => {
   }
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-});
+
+// API routes must come before here
 
 app.get('/api/ping', (req, res) => {
   res.json({ status: 'ok', message: 'Guardian Brain is alive!' });
