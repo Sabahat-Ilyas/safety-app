@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { isValidPhoneNumber } = require('libphonenumber-js');
+const { isValidPhoneNumber, parsePhoneNumberFromString } = require('libphonenumber-js');
 const twilio = require('twilio');
 const nodemailer = require('nodemailer');
 const app = express();
@@ -415,7 +415,7 @@ app.get('/api/ping', (req, res) => {
 });
 
 // For local development
-if (process.env.NODE_ENV !== 'production') {
+if (require.main === module) {
   app.listen(port, "0.0.0.0", () => {
     console.log(`Server running at http://0.0.0.0:${port}`);
   });
