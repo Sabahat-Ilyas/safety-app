@@ -1,49 +1,91 @@
-# Guardian Safety App
+Guardian — AI-Powered Personal Safety App
+What it does & the problem it solves
 
-Guardian is a comprehensive, full-stack personal safety application designed to provide immediate assistance, emergency tracking, and AI-powered threat detection. It is built as a web application with the ability to be packaged as a native Android app using Capacitor.
+Guardian is an AI-powered personal safety app built for people who feel vulnerable while alone — whether commuting late at night, walking through an unfamiliar area, or simply wanting a safety net during everyday life. It targets women, students, solo travelers, children, and elderly users who want a fast, reliable way to alert trusted contacts and get real-time safety guidance if something feels wrong.
 
-## Architecture Overview
+Instead of a static "panic button," Guardian layers AI on top of the emergency-response flow: it can analyze what's happening around the user (via conversation, transcript, or movement data) and decide whether the situation actually warrants an alert — reducing both false alarms and delayed responses.
 
-The project is structured as a monorepo containing both the frontend client and the backend API server.
+Live URL: https://safety-app-one.vercel.app
 
-- **Frontend (`/client`)**: A modern single-page React application powered by Vite.
-- **Backend (`/api`)**: A robust Node.js and Express server that handles data persistence, authentication, and external API integrations (SMS, Email, AI).
+Features
+User authentication — sign up / log in
+Emergency contacts management — add, view, and remove trusted contacts (family, emergency services, custom)
+One-tap SOS alert — sends a real SMS (via Twilio) to all emergency contacts with the user's last known location
+AI Safety Advisor chat — users can ask for safety advice in plain language and get calm, practical guidance
+AI transcript danger analysis — analyzes live/recorded audio transcripts for signs of distress or threat
+AI movement analysis — analyzes movement sensor data (speed, acceleration spikes, route deviation) to flag suspicious activity like a struggle or sudden fall
+Works as a web app, and can be packaged as an Android app via Capacitor
+The AI feature
 
----
+Guardian's AI layer is powered by Google's Gemini API (gemini-1.5-flash) and drives three real-time features:
 
-## Technology Stack & Libraries Used
+Safety Advisor Chat — a conversational assistant that gives short, calm, practical safety advice, and prioritizes directing users to the SOS button or local emergency services when danger is described.
+Transcript Danger Analysis — takes a text transcript and returns a structured JSON verdict (isDanger, reason) on whether it contains signs of a threat.
+Movement Anomaly Analysis — takes movement sensor data and returns a structured JSON verdict (activity, isSuspicious, reason) on whether the pattern looks abnormal (e.g. a fall or struggle).
 
-### 馃帹 Frontend (Client-Side)
-*   **React (`react`, `react-dom`)**: The core library used for building the interactive user interface.
-*   **Vite (`vite`, `@vitejs/plugin-react`)**: A lightning-fast development server and bundler used instead of Create React App.
-*   **Tailwind CSS (`tailwindcss`, `@tailwindcss/postcss`)**: A utility-first CSS framework used for all styling. Enables rapid, responsive UI design without writing custom CSS files.
-*   **React Router (`react-router-dom`)**: Handles navigation between different screens (Login, Dashboard, First Aid, Profile) without reloading the page.
-*   **Lucide React (`lucide-react`)**: Provides the beautiful, consistent SVG icons used throughout the app (e.g., arrows, user icons, bells, shields).
-*   **Leaflet & React-Leaflet (`leaflet`, `react-leaflet`)**: Open-source mapping libraries used to render interactive maps and pinpoint the user's real-time GPS location during emergencies.
-*   **Capacitor (`@capacitor/core`, `@capacitor/android`, `@capacitor/cli`)**: Used to convert this web application into a deployable native Android APK file.
+System prompt used for the Safety Advisor Chat:
 
-### 鈿欙笍 Backend (Server-Side)
-*   **Node.js & Express (`express`)**: The foundation of the API server. Handles routing for user authentication, profile updates, and triggering alerts.
-*   **Google Generative AI (`@google/generative-ai`)**: Integrates the Gemini AI model to act as an AI Safety Advisor, analyze microphone transcripts, and process movement data to detect suspicious activity.
-*   **Twilio (`twilio`)**: Used for sending automated SMS emergency alerts to the user's trusted contacts when an SOS is triggered.
-*   **Nodemailer (`nodemailer`)**: Used for sending automated email notifications (e.g., password reset emails).
-*   **Libphonenumber-js (`libphonenumber-js`)**: An advanced library used to strictly validate and format international phone numbers added to the emergency contacts list.
-*   **Cors (`cors`)**: Middleware that allows the frontend (running on a different port) to securely communicate with the backend.
-*   **Dotenv (`dotenv`)**: Securely loads environment variables (like API keys) from a `.env` file so they aren't hardcoded into the source code.
+You are Guardian, an AI personal safety advisor inside a mobile safety app.
+Your job: give short, calm, practical safety advice to the user based on their message.
+If they describe an emergency or immediate danger, prioritize telling them to use the
+app's SOS/alert button and contact local emergency services.
+Keep responses under 80 words, warm but direct tone.
 
----
+The transcript and movement analyzers use similar structured prompts that force the model to reply in strict JSON, so the app can act on the result programmatically (e.g., auto-triggering an alert).
 
-## How Data is Managed
+Tools, services & models used
+Frontend: React
+Backend: Node.js / Express (deployed as Vercel serverless functions)
+AI model: Google Gemini (gemini-1.5-flash) via @google/generative-ai
+SMS/alerts: Twilio
+Mobile packaging: Capacitor (for Android build)
+Hosting: Vercel
+Phone validation: libphonenumber-js
+Screenshots
 
-Currently, the application uses local JSON files for persistent data storage. This mimics a real database for development purposes.
+Add 3+ screenshots here before submitting — e.g. login screen, emergency contacts screen, SOS alert flow, AI chat in action.
 
-1.  **`api/users.json`**: Stores registered user accounts, passwords, full names, emails, and their app preferences (like Dark Mode toggles and Deactivation PINs).
-2.  **`api/contacts.json`**: Stores the user's customized list of emergency contacts, categorized by type (family, emergency, custom).
-3.  **`api/firstaid.json`**: Stores the dynamic emergency guides (CPR, Choking, etc.) that the frontend fetches and displays in the First Aid Guide screen.
+Show Image Show Image Show Image
 
-## Project Scripts & Execution
+How to run this project locally
+Prerequisites
+Node.js (v18+)
+A Gemini API key (Google AI Studio)
+A Twilio account (SID, Auth Token, and a Twilio phone number)
+Setup
+bash
+# Clone the repo
+git clone https://github.com/Sabahat-Ilyas/safety-app.git
+cd safety-app
 
-- `npm run dev` (in `/client`): Starts the Vite frontend development server at `http://localhost:5173`.
-- `npm start` (in root): Starts the Express backend API server at `http://localhost:5000`.
+# Install dependencies
+npm install
 
-*Note: For local development, the Vite configuration (`vite.config.js`) proxies all API requests starting with `/api` to the backend server.*
+# Create a .env file in the root with:
+GEMINI_API_KEY=your_gemini_api_key
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_number
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_gmail_app_password
+
+# Run the backend
+npm start
+
+# In a separate terminal, run the frontend (from /client)
+cd client
+npm install
+npm run dev
+
+The app will be available at http://localhost:5173 (frontend) with the API running on http://localhost:5000.
+
+Building the Android app (optional)
+bash
+npx cap sync android
+npx cap open android
+
+Set API_BASE_URL in config.js to your live Vercel URL before building the APK.
+
+What I learned
+
+Building Guardian end-to-end taught me how to connect a real AI model to a safety-critical decision flow — not just generating text, but getting structured, actionable output (JSON) that the app can act on automatically. I also learned the importance of keeping API keys out of source control and wiring third-party services (Twilio) securely through environment variables on the hosting platform rather than in code.
